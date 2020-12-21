@@ -31,7 +31,12 @@ const navOptions = {
 
 
 const shopNavigator = createStackNavigator({
-    productOverview:ProductOverviewScreen,
+    productOverview:{
+        screen:ProductOverviewScreen,
+        navigationOptions:{
+            headerTitle:"products"
+        }
+    },
     productDetail:ProductDetailScreen,
     cart:CartScreen
 },
@@ -59,13 +64,19 @@ const orderNavigator = createStackNavigator({
 )
 
 const userProductsNavigator = createStackNavigator({
-    userProducts:UserProductScreen,
+    userProducts:{
+        screen:UserProductScreen,
+        navigationOptions:{
+            headerTitle:"my products"
+        }
+    },
     editUserProducts:EditProductScreen
 },
 {
     
     navigationOptions:{
-        drawerIcon:drawerConfig=> <Ionicons name="ios-pricetag" color={drawerConfig.tintColor} size={23}/>
+        drawerIcon:drawerConfig=> <Ionicons name="ios-pricetag" color={drawerConfig.tintColor} size={23}/>,
+        title:"my products"
     },
     defaultNavigationOptions:navOptions
 
@@ -73,11 +84,15 @@ const userProductsNavigator = createStackNavigator({
 )
 
 const navigationDrawer = createDrawerNavigator({
-    shop:shopNavigator,
+    shop:{screen:shopNavigator,navigationOptions:{title:"shop"}},
     orders:orderNavigator,
     userProducts:userProductsNavigator
-},{contentOptions:{
-    activeTintColor:colours.primary
-}})
+},
+{
+    contentOptions:{
+        activeTintColor:colours.primary,
+    },
+    
+})
 
 export default createAppContainer(navigationDrawer);

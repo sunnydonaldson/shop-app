@@ -1,4 +1,4 @@
-import React from "react";
+ import React from "react";
 import {Text,View,ScrollView,TextInput,StyleSheet} from "react-native";
 import {HeaderButtons,Item} from "react-navigation-header-buttons";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";

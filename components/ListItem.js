@@ -5,7 +5,7 @@ import colours from "../constants/colours";
 const ListItem = props =>{
     const TouchableComponent = Platform.OS =="android" &&Platform.Version >=21  ?TouchableNativeFeedback:TouchableOpacity;
     return(
-        <View style={{borderRadius:15,justifyContent:"center",alignItems:"center"}}>
+        <View style={styles.container}>
         
         <TouchableComponent onPress={props.onSelect} useForeground>
             <View style={styles.card}>
@@ -22,19 +22,29 @@ const ListItem = props =>{
 }
 
  const styles = StyleSheet.create({
+    container:{
+        borderRadius:15,
+        justifyContent:"center",
+        alignItems:"center",
+        shadowColor:"black",
+        shadowOffset:{width:0,height:2},
+        shadowOpacity:0.5,
+        shadowRadius:10,
+        
+    },
     card:{
         justifyContent:"center",
         alignItems:"center",
-        width:"85%",
+        width:Platform.OS === "android"?"80%":350,
         height:300,
         borderRadius:15,
         elevation:10,
         backgroundColor:colours.tertiary,
         margin:10,
-        shadowColor:"black",
-        shadowOffset:{width:0,height:2},
-        shadowOpacity:0.26,
-        shadowRadius:8,
+        // shadowColor:"black",
+        // shadowOffset:{width:0,height:2},
+        // shadowOpacity:0.26,
+        // shadowRadius:8,
         overflow:"hidden"
         
     },

@@ -17,7 +17,7 @@ const ProductOverviewScreen = props =>{
     }
     return(
         <View>
-        <FlatList data={products} renderItem={itemData =>
+        <FlatList style={{width:"100%"}} data={products} renderItem={itemData =>
              <ListItem onSelect={()=>selectItemHandler(itemData.item.id,itemData.item.title)} label={itemData.item.title} image={itemData.item.imageURL} price={itemData.item.price}>
                 <Button color={colours.primary}title="add to cart" onPress={()=>{dispatch(actions.addToCart(itemData.item))}}/>
                 <Button color={colours.secondary}title="view item" onPress={() => selectItemHandler(itemData.item.id,itemData.item.title)}/>
