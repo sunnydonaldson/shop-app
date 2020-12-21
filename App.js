@@ -1,13 +1,45 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React,{useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Provider } from 'react-redux';
+import {createStore,combineReducers} from "redux";
+import productReducer from "./store/reducers/products";
+import ShopNavigation from "./navigation/shopNavigation";
+import AppLoading from "expo-app-loading";
+import cartReducer from "./store/reducers/cart";
+import orderReducer from "./store/reducers/orders";
+
+import * as Font from "expo-font"
+
+const fetchFonts = ()=>{
+  return(Font.loadAsync({
+    "open-sans":require("./assets/fonts/OpenSans-Regular.ttf"),
+    "open-sans-bold":require("./assets/fonts/OpenSans-Bold.ttf")
+  }))
+}
+
+const rootReducer = combineReducers({
+  products:productReducer,
+  cart: cartReducer,
+  orders: orderReducer
+});
+
+const store = createStore(rootReducer);
 
 export default function App() {
+  const [fontLoaded,setFontLoaded] = useState(false);
+
+  if(!fontLoaded){
+    return(
+      <AppLoading startAsync={fetchFonts} onError={error=>console.log(error)} onFinish={()=>setFontLoaded(true)}/>
+    )
+
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <ShopNavigation/>
+    </Provider>
   );
 }
 
