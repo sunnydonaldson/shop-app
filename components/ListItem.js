@@ -28,8 +28,9 @@ const ListItem = props =>{
         alignItems:"center",
         shadowColor:"black",
         shadowOffset:{width:0,height:2},
-        shadowOpacity:0.5,
+        shadowOpacity:0.3,
         shadowRadius:10,
+        margin:10
         
     },
     card:{

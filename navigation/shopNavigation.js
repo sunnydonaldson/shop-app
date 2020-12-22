@@ -2,14 +2,12 @@ import {createStackNavigator} from "react-navigation-stack";
 import {createDrawerNavigator} from "react-navigation-drawer";
 import {createTabNavigator} from "react-navigation-tabs";
 import ProductOverviewScreen from "../screens/shop/ProductOverviewScreen";
-import {createAppContainer} from "react-navigation";
+import {createAppContainer,} from "react-navigation";
 import {Platform} from "react-native";
 import colours from "../constants/colours";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
 import OrderScreen from "../screens/shop/OrderScreen";
-import {HeaderButtons,Item} from "react-navigation-header-buttons";
-import CustomHeaderButton from "../components/UI/CustomHeaderButton";
 import React from "react";
 import {Ionicons} from "@expo/vector-icons";
 import UserProductScreen from "../screens/user/UserProductScreen";
@@ -34,7 +32,13 @@ const shopNavigator = createStackNavigator({
     productOverview:{
         screen:ProductOverviewScreen,
         navigationOptions:{
-            headerTitle:"products"
+            headerTitle:"products",
+            headerStyle:{
+                shadowColor:"black",
+                shadowOffset:{width:0,height:2},
+                shadowOpacity:0.3,
+                shadowRadius:15
+            }
         }
     },
     productDetail:ProductDetailScreen,
@@ -91,6 +95,7 @@ const navigationDrawer = createDrawerNavigator({
 {
     contentOptions:{
         activeTintColor:colours.primary,
+        //fontFamily:"open-sans-bold",
     },
     
 })
