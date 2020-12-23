@@ -4,7 +4,6 @@ import CartItem from "./CartItem";
 import colours from "../constants/colours";
 
 const OrderItem = props =>{
-    console.log(props.items[0].productQuantity)
     const [showDetails,setShowDetails] = React.useState(false);
     return(
         <View style={styles.card}>

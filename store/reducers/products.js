@@ -1,6 +1,7 @@
 import PRODUCTS from "../../data/dummy-data";
-import {CREATE_PRODUCT,UPDATE_PRODUCT,DELETE_PRODUCT} from "../actions/products";
+import {CREATE_PRODUCT,UPDATE_PRODUCT,DELETE_PRODUCT,SET_PRODUCTS} from "../actions/products";
 import product from "../../models/product";
+import { ActionSheetIOS } from "react-native";
 
 
 const initialState={
@@ -10,8 +11,13 @@ const initialState={
 
 const productReducer = (state = initialState,action) =>{
     switch (action.type){
+        case SET_PRODUCTS:
+            return{
+                availableProducts:action.products,
+                userProducts:action.products.filter(product=> product.ownerID ==="u1")
+            }
         case CREATE_PRODUCT:
-            const newProduct = new product(new Date().toString(),"u1",action.productData.title,action.productData.imageUrl,action.productData.description,action.productData.price)
+            const newProduct = new product(action.productData.id,"u1",action.productData.title,action.productData.imageUrl,action.productData.description,action.productData.price)
             return{
                 ...state,
                 availableProducts:[

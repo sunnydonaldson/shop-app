@@ -1,5 +1,5 @@
 import React from "react";
-import {View,Text,StyleSheet,Button} from "react-native";
+import {View,Text,StyleSheet,Button,ActivityIndicator, Alert} from "react-native";
 
 import colours from "../../constants/colours";
 import {useDispatch,useSelector} from "react-redux";
@@ -7,8 +7,11 @@ import { FlatList } from "react-native-gesture-handler";
 import CartItem from "../../components/CartItem";
 import {removeFromCart} from "../../store/actions/cart";
 import {newOrder} from "../../store/actions/orders";
+import { useState } from "react";
 
 const CartScreen = props =>{
+    const [isLoading,setIsLoading] = React.useState(false);
+    const [error,setError] = React.useState();
     const dispatch = useDispatch();
 
     const cartTotal = useSelector(state => state.cart.sum).toFixed(2);
@@ -28,11 +31,37 @@ const CartScreen = props =>{
         return transformedItems.sort((a,b)=> a.productId > b.productId?1:-1);
     });
 
+    React.useEffect(()=>{
+        if(error){
+            Alert.alert("An error has occured",error,[{title:"okay"}])
+        }
+    },[error])
+
+    if(isLoading){
+        return(
+            <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+                <ActivityIndicator color={colours.primary} size="large"/>
+            </View>
+        )
+    }
+
     return(
     <View style={styles.screen}>
         <View style={styles.summary}>
             <Text>total: £{cartTotal}</Text>
-            <Button onPress={()=>dispatch(newOrder(cartItems,cartTotal))} disabled={cartItems.length == 0} color={colours.secondary} title="buy now"/>
+            <Button onPress={async ()=>{
+                setError(null)
+                setIsLoading(true)
+                try{
+                    await dispatch(newOrder(cartItems,cartTotal))
+                    setIsLoading(false)
+
+                }catch(err){
+                    setError(err.message)
+                }
+                
+                }
+                } disabled={cartItems.length == 0} color={colours.secondary} title="buy now"/>
         </View>
         <FlatList
             data={cartItems}

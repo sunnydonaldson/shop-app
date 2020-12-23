@@ -1,5 +1,5 @@
  import React,{useReducer} from "react";
-import {Text,View,ScrollView,TextInput,StyleSheet,Alert,KeyboardAvoidingView} from "react-native";
+import {Text,View,ScrollView,TextInput,StyleSheet,Alert,KeyboardAvoidingView,ActivityIndicator} from "react-native";
 import {HeaderButtons,Item} from "react-navigation-header-buttons";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import {useSelector} from "react-redux";
@@ -8,6 +8,7 @@ import * as productActions from "../../store/actions/products";
 
 import Input from "../../components/UI/Input";
 import { useCallback } from "react";
+import colours from "../../constants/colours";
 
 const UPDATE = "UPDATE"
 
@@ -35,6 +36,8 @@ const formReducer = (state,action)=>{
 }
 
 const EditProductScreen = props =>{
+    const [isLoading,setIsLoading] = React.useState(false);
+    const [error,setError] = React.useState()
     const productKey = props.navigation.getParam("prodId")
     const editedProduct = useSelector(state => state.products.userProducts.find(product=>product.id === productKey));
 
@@ -73,7 +76,7 @@ const EditProductScreen = props =>{
  
     
 
-    const submitHandler= React.useCallback(()=>{
+    const submitHandler= React.useCallback(async()=>{
         if(!formState.formIsValid){
             Alert.alert("invalid entry","make sure you fill out all fields with appropriate information",[
                 {text:"okay"}
@@ -81,17 +84,43 @@ const EditProductScreen = props =>{
             ])
             return;
         }
-        if(editedProduct){
-            dispatch(productActions.updateProduct(productKey,formState.inputValues.title,formState.inputValues.url,formState.inputValues.description))
-        }else{
-            dispatch(productActions.createProduct(formState.inputValues.title,+formState.inputValues.price,formState.inputValues.url,formState.inputValues.description))
+        setIsLoading(true)
+        setError(null);
+        try{
+            if(editedProduct){
+                await dispatch(productActions.updateProduct(productKey,formState.inputValues.title,formState.inputValues.url,formState.inputValues.description))
+            }else{
+                await dispatch(productActions.createProduct(formState.inputValues.title,+formState.inputValues.price,formState.inputValues.url,formState.inputValues.description))
+            }
+            props.navigation.goBack()
+
+        }catch (err){
+            setError(err.message)
+
         }
-        props.navigation.goBack()
+        
+        setIsLoading(false)
+        
     },[formState,dispatch]);
+
+    React.useEffect(()=>{
+        if(error){
+            Alert.alert("an error has occured",error,[{title:"ok"}])
+        }
+    },[error])
 
     React.useEffect(()=>{
         props.navigation.setParams({onSubmit:submitHandler})
     },[submitHandler])
+
+
+    if(isLoading){
+        return(
+            <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+                <ActivityIndicator size="large" color={colours.primary}/>
+            </View>
+        )
+    }
 
 
     return(
