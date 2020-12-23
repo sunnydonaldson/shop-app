@@ -19,10 +19,8 @@ export const fetchProducts= ()=>{
             transformedData.push(newProduct)
             }
 
-            console.log(resData)
             dispatch({type:SET_PRODUCTS,products:transformedData})
         }catch(err){
-            console.log(err)
             throw err; 
         }
     }
@@ -48,7 +46,6 @@ export const createProduct = (title,price,imageUrl,description) =>{
         });
 
         const resData = await response.json()
-        console.log(resData)
         dispatch({
             type:CREATE_PRODUCT,
             productData:{

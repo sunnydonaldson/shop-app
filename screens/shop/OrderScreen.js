@@ -60,7 +60,7 @@ const OrderScreen = props =>{
     }
 
     return(
-        <View style={{alignItems:"center"}}>
+        <View style={{flex:1,alignItems:"center"}}>
             <Text>test text</Text>
             <FlatList data={orders} contentContainerStyle={{width:"100%"}} renderItem={itemData => <OrderItem items={itemData.item.items} date={itemData.item.readableDate} amount={itemData.item.cost}/>}/>
         </View>
