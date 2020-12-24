@@ -1,18 +1,22 @@
+import React from "react";
+import {SafeAreaView,Text,Button,Platform,View} from "react-native"
+import {useDispatch} from "react-redux";
+import {logout} from "../store/actions/auth";
+
 import {createStackNavigator} from "react-navigation-stack";
-import {createDrawerNavigator} from "react-navigation-drawer";
+import {createDrawerNavigator,DrawerItems} from "react-navigation-drawer";
 import {createTabNavigator} from "react-navigation-tabs";
 import ProductOverviewScreen from "../screens/shop/ProductOverviewScreen";
 import {createAppContainer,createSwitchNavigator} from "react-navigation";
-import {Platform} from "react-native";
 import colours from "../constants/colours";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
 import OrderScreen from "../screens/shop/OrderScreen";
-import React from "react";
 import {Ionicons} from "@expo/vector-icons";
 import UserProductScreen from "../screens/user/UserProductScreen";
 import EditProductScreen from "../screens/user/EditProductScreen";
 import AuthScreen from "../screens/user/AuthScreen";
+import StartupScreen from "../screens/StartupScreen";
 
 const navOptions = {
     headerStyle:{
@@ -34,12 +38,12 @@ const shopNavigator = createStackNavigator({
         screen:ProductOverviewScreen,
         navigationOptions:{
             headerTitle:"products",
-            headerStyle:{
-                shadowColor:"black",
-                shadowOffset:{width:0,height:2},
-                shadowOpacity:0.3,
-                shadowRadius:15
-            }
+            // headerStyle:{
+            //     shadowColor:"black",
+            //     shadowOffset:{width:0,height:2},
+            //     shadowOpacity:0.3,
+            //     shadowRadius:15
+            // }
         }
     },
     productDetail:ProductDetailScreen,
@@ -98,6 +102,21 @@ const navigationDrawer = createDrawerNavigator({
         activeTintColor:colours.primary,
         //fontFamily:"open-sans-bold",
     },
+    contentComponent:props=>{
+        const dispatch = useDispatch();
+        return(
+            <View style={{flex:1}}>
+            <SafeAreaView forceInset={{top:"always",horizontal:"never"}}>
+                <DrawerItems {...props}/>
+                <Button title="logout" color={colours.primary} onPress={()=>{
+                    dispatch(logout())
+                    props.navigation.navigate("auth")
+                    }}/>
+            </SafeAreaView>
+            </View>
+
+        )
+    }
     
 })
 
@@ -106,6 +125,7 @@ const authNavigator = createStackNavigator({
 })
 
 const mainNavigator = createSwitchNavigator({
+    startup:StartupScreen,
     auth:authNavigator,
     shop:navigationDrawer
 
