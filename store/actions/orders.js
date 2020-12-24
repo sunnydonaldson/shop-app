@@ -1,12 +1,14 @@
 import order from "../../models/order";
+import auth from "../reducers/auth";
 export const NEW_ORDER = "NEW_ORDER";
 export const SET_ORDERS = "SET_ORDERS";
 
 
 export const setOrders = ()=>{
-    return async dispatch =>{
+    return async (dispatch,getState) =>{
+            const userId = getState().auth.userId;
         try{
-            const response = await fetch("https://rn-practice-shop-app-default-rtdb.firebaseio.com/u1/orders.json");
+            const response = await fetch(`https://rn-practice-shop-app-default-rtdb.firebaseio.com/${userId}/orders.json`);
             if(!response.ok){
                 throw new Error("an error has occured");
             }
@@ -31,9 +33,11 @@ export const setOrders = ()=>{
 }
 
 export const newOrder = (cartItems,totalCost) =>{
-    return async dispatch =>{
+    return async (dispatch,getState) =>{
         const date = new Date().toISOString();
-        const response = await fetch("https://rn-practice-shop-app-default-rtdb.firebaseio.com/u1/orders.json",{
+        const userToken = getState().auth.token;
+        const userId = getState().auth.userId;
+        const response = await fetch(`https://rn-practice-shop-app-default-rtdb.firebaseio.com/${userId}/orders.json?auth=${userToken}`,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"

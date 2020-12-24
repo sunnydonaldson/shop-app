@@ -5,21 +5,21 @@ import { ActionSheetIOS } from "react-native";
 
 
 const initialState={
-    availableProducts:PRODUCTS,
-    userProducts:PRODUCTS.filter(product => product.ownerID === "u1")
+    availableProducts:[],
+    userProducts:[]
 }
 
 const productReducer = (state = initialState,action) =>{
     switch (action.type){
         case SET_PRODUCTS:
             return{
+                ...state,
                 availableProducts:action.products,
-                userProducts:action.products.filter(product=> product.ownerID ==="u1")
+                userProducts:action.userProducts
             }
         case CREATE_PRODUCT:
-            const newProduct = new product(action.productData.id,"u1",action.productData.title,action.productData.imageUrl,action.productData.description,action.productData.price)
+            const newProduct = new product(action.productData.id,action.productData.ownerId,action.productData.title,action.productData.imageUrl,action.productData.description,action.productData.price)
             return{
-                ...state,
                 availableProducts:[
                     ...state.availableProducts,
                     newProduct
@@ -47,12 +47,14 @@ const productReducer = (state = initialState,action) =>{
                 const updatedAvailableProducts = [...state.availableProducts];
                 updatedAvailableProducts[availableProductIndex] = updatedProduct;
             return{
+                ...state,
                 availableProducts:updatedAvailableProducts,
                 userProducts:updatedUserProducts
             }
 
         case DELETE_PRODUCT:
             return{
+                ...state,
                 availableProducts:state.availableProducts,
                 userProducts:state.userProducts.filter(item=> item.id !== action.productId),
                 availableProducts:state.availableProducts.filter(item=> item.id !== action.productId)
