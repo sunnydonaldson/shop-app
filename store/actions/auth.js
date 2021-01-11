@@ -4,14 +4,19 @@ export const LOGIN = "LOGIN";
 export const LOGIN_FROM_STORAGE = 'LOGIN_FROM_STORAGE';
 export const LOGOUT = "LOGOUT";
 
+let timer;
+
 //const apiKey = "***REMOVED***"
 
-export const loginFromStorage = (token,userId) =>{
-    return{
+export const loginFromStorage = (token,userId,expiryTime) =>{
+    return async dispatch=>{
+        dispatch(setLogoutTimer(expiryTime))
+        dispatch({
         type:LOGIN_FROM_STORAGE,
         token:token,
         userId:userId
-    }
+    })
+}
 }
 
 export const signup = (email,password)=>{
@@ -41,6 +46,9 @@ export const signup = (email,password)=>{
         }
         const resData = await response.json();
         console.log(resData);
+
+        dispatch(setLogoutTimer(parseInt(resData.expiresIn)*1000));
+
         dispatch({type:SIGNUP,token:resData.idToken,userId:resData.localId})
         const expirationDate = new date(new Date().getTime() + parseInt(resData.expiresIn)*1000) 
         saveDataToStorage(resData.idToken,resData.localId,expirationDate)
@@ -82,6 +90,8 @@ export const login = (email,password)=>{
         }
         const resData = await response.json();
         console.log(resData)
+
+        dispatch(setLogoutTimer(parseInt(resData.expiresIn)*1000));
         dispatch({type:LOGIN,token:resData.idToken,userId:resData.localId})
         
         const expirationDate = new Date(new Date().getTime() + parseInt(resData.expiresIn) * 1000)
@@ -98,5 +108,27 @@ const saveDataToStorage = (token,userId,expirationDate)=>{
 }
 
 export const logout = ()=>{
+    AsyncStorage.removeItem("userData")
+    clearLogoutTimer()
    return{type:LOGOUT} 
+}
+
+
+const clearLogoutTimer= ()=>{
+    if(timer){
+        clearTimeout(timer)
+
+    }
+    
+}
+
+const setLogoutTimer = expirationTime =>{
+    return async dispatch =>{
+        timer = setTimeout(()=>{
+            dispatch(logout())
+        },expirationTime)
+
+    }
+
+
 }

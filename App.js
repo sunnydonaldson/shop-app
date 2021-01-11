@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import {createStore,combineReducers,applyMiddleware} from "redux";
 import ReduxThunk from "redux-thunk";
 import productReducer from "./store/reducers/products";
-import ShopNavigation from "./navigation/shopNavigation";
+import NavigationContainer from "./navigation/NavigationContainer";
 import AppLoading from "expo-app-loading";
 import cartReducer from "./store/reducers/cart";
 import orderReducer from "./store/reducers/orders";
@@ -41,7 +41,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <ShopNavigation/>
+      <NavigationContainer/>
     </Provider>
   );
 }

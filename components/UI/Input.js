@@ -58,9 +58,7 @@ const Input = props =>{
     }
     const  {onInputChange,id} = props;
     React.useEffect(()=>{
-        if(inputState.touched){
-            props.onInputChange(id,inputState.value,inputState.isValid)
-        }
+        props.onInputChange(id,inputState.value,inputState.isValid)
     },[inputState,onInputChange,id ])
 
 

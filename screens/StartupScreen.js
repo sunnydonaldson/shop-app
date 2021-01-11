@@ -21,7 +21,8 @@ const StartupScreen= props =>{
                     props.navigation.navigate("auth")
                     return;
                 }
-                dispatch(loginFromStorage(token,userId))
+                const expirationTime = expiryDate.getTime() - new Date().getTime();
+                dispatch(loginFromStorage(token,userId,expirationTime ))
                 props.navigation.navigate("shop")
  
             }catch(err){
