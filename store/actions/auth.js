@@ -6,8 +6,6 @@ export const LOGOUT = "LOGOUT";
 
 let timer;
 
-//const apiKey = "***REMOVED***"
-
 export const loginFromStorage = (token,userId,expiryTime) =>{
     return async dispatch=>{
         dispatch(setLogoutTimer(expiryTime))
